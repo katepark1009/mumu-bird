@@ -1,21 +1,49 @@
-import React, { Children } from 'react'
-import { Menu, Input, Button } from 'antd'
+import React from 'react'
+import { Menu, Input, Avatar, Row, Col, Card } from 'antd'
+import LoginForm from './LoginForm'
 import Link from 'next/link'
+import PropTypes from 'prop-types'
+import UserProfile from './UserProfile'
 
-const AppLayout = ({children}) => {
+const dummy = {
+  nickname: 'Kate',
+  Post: [],
+  Followings: [],
+  Followers: [],
+  isLoggedIn: false
+}
+
+const AppLayout = ({ children }) => {
   return (
     <div>
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" style={{marginBottom: '10px'}}>
         <Menu.Item key="home"><Link href='/'><a>MumuBird</a></Link></Menu.Item>
         <Menu.Item key="profile"><Link href='/profile'><a>profile</a></Link></Menu.Item>
         <Menu.Item key="mail">
-          <Input.Search enterButton style={{verticalAlign:'middle'}}/>
+          <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
         </Menu.Item>
       </Menu>
-      <Link href='/signup'><Button>Sign in</Button></Link>
-      {children}
+
+      <Row gutter={8}>
+        <Col xs={24} md={6}>
+          {dummy.isLoggedIn
+            ? <UserProfile />
+            : <LoginForm />
+          }
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6}>
+          <a href='https://github.com/katepark1009/mumu-bird' target='_blank'>Made by Kate</a>
+        </Col>
+      </Row>
     </div>
   )
+}
+
+AppLayout.propTypes = {
+  children: PropTypes.node
 }
 
 export default AppLayout
