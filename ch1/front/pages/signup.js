@@ -1,6 +1,8 @@
 import React, { useState, useCallback, memo } from 'react'
 import { Form, Checkbox, Button, Input } from 'antd'
 import { useInput } from '../components/customHook/hooks'
+import { useDispatch } from 'react-redux'
+import { signUpAction } from '../reducers/user'
 // const TextInput = memo(({value, onChange}) => {
 //   return (
 //     <Input name='user-id' value={value} required onChange={onchange} />
@@ -21,6 +23,8 @@ const Signup = () => {
   const [nick, onChangeNick] = useInput('')
   const [password, onChangePassword] = useInput('')
 
+  const dispatch = useDispatch()
+
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     if (password !== passwordCheck) {
@@ -29,6 +33,11 @@ const Signup = () => {
     if (!term) {
       return setTermError(true)
     }
+    dispatch(signUpAction({
+      id,
+      password,
+      nick,
+    }))
   }, [password, passwordCheck, term])
 
   const onChangePasswordCheck = useCallback((e) => {

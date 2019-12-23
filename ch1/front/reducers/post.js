@@ -1,9 +1,17 @@
 const initialState = {
-  mainPosts: []
+  mainPosts: [{
+    User: {
+      id: 1,
+      nickname: 'Kate',
+    },
+    content: 'fisrt post test',
+    img: 'https://storep-phinf.pstatic.net/linesweet_01/original_8.gif?type=pa50_50'
+  }],
+  imagePath: [],//미리보기 이미지
 }
 
-const ADD_POST = 'ADD_POST' //액션 이름
-const ADD_DUMMY = 'ADD_DUMMY' //액션 이름
+export const ADD_POST = 'ADD_POST' //액션 이름
+export const ADD_DUMMY = 'ADD_DUMMY' //액션 이름
 
 
 const addPost = { //type: 액션이름, 데이터 함께 넣어줌 //state같은 역할

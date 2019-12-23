@@ -1,21 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Button } from 'antd'
-
-const dummy = {
-  isLoggedIn: true,
-  imagePath: [],
-  mainPosts: [{
-    User: {
-      id: 1,
-      nickname: 'Kate',
-    },
-    content: 'fisrt post test',
-    img: 'https://storep-phinf.pstatic.net/linesweet_01/original_8.gif?type=pa50_50'
-  }],
-}
+import { useSelector } from 'react-redux'
 
 const PostForm = () => {
+  const { imagePath } = useSelector(state=> state.post)
   return (
     <div>
       <Form encType='multipark/form-data' style={{ margin: '10px 0 20px' }}>
@@ -26,7 +15,7 @@ const PostForm = () => {
           <Button type='primary' style={{ float: 'right' }} htmlType='submit'>Submit</Button>
         </div>
         <div>
-          {dummy.imagePath.map((v, i) => {
+          {imagePath.map((v) => {
             return (
               <div key={v} style={{ display: 'inline-block' }}>
                 <img src={'http://localhost:3065/' + v} style={{ width: '200px' }} alt={v} />
