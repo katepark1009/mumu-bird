@@ -7,7 +7,7 @@ function loginAPI(){ //서버에 요청을 보내는 부분
 
 function* login(){
   try{
-    yield delay(100)  //서버에 요청
+    yield call(loginAPI)  //서버에 요청
     yield put({ //put은 리덕스의 dispatch와 동일,
       type: LOG_IN_SUCCESS
     })
@@ -30,8 +30,7 @@ function* watchLogin(){
 }
 
 function* watchHello(){ //while(true) 와 같은 역할, 제너레이터 함수 넣어주기.
-  yield takeLatest(HELLO_SAGA, function* (){
-    yield delay(1000)
+  yield takeEvery(HELLO_SAGA, function* (){
     yield put({
       type: 'BYE_SAGA'
     })
@@ -63,8 +62,7 @@ function* watchSignUp(){
 
 export default function* userSaga(){
   yield all([
-    watchLogin(),
-    watchSignUp(),
-    watchHello()
+    fork(watchLogin),
+    fork(watchSignUp),
   ])
 }
