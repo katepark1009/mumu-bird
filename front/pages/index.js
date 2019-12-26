@@ -11,7 +11,10 @@ const Home = () => {
   const { mainPosts } = useSelector(state=> state.post)
   console.log('isLoggedIn', isLoggedIn)
   useEffect(()=> {
-    //dispatch(loginAction)
+    // dispatch({
+    //   type: 'HELLO_SAGA'
+    // })
+
     //dispatch(logoutAction)
   }, []) // [] 패스하면 componentdidmount랑 똑같음. 컴포넌트가 첫번째 랜더링 될때, 이 액션이 디스패치 됨.
   return (

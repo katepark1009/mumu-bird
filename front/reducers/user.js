@@ -17,7 +17,8 @@ export const LOG_IN_FAILURE = 'LOG_IN_FAILURE'
 export const LOG_OUT = 'LOG_OUT' 
 export const SIGN_UP = 'SIGN_UP' 
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
-
+export const HELLO_SAGA='HELLO_SAGA'
+export const BYE_SAGA='BYE_SAGA'
 
 export const loginAction = { //type: 액션이름, 데이터 함께 넣어줌 //state같은 역할
   type: LOG_IN,

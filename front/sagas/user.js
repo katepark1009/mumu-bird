@@ -1,5 +1,5 @@
-import { all, delay, put, take } from 'redux-saga/effects'
-import { LOG_IN, LOG_IN_SUCCESS, LOG_IN_FAILURE } from '../reducers/user'
+import { all, delay, put, take, takeLatest, takeEvery } from 'redux-saga/effects'
+import { LOG_IN, LOG_IN_SUCCESS, LOG_IN_FAILURE, HELLO_SAGA, BYE_SAGA } from '../reducers/user'
 
 function loginAPI(){ //서버에 요청을 보내는 부분
 
@@ -29,6 +29,34 @@ function* watchLogin(){
   }
 }
 
+function* watchHello(){ //while(true) 와 같은 역할, 제너레이터 함수 넣어주기.
+  yield takeLatest(HELLO_SAGA, function* (){
+    yield delay(1000)
+    yield put({
+      type: 'BYE_SAGA'
+    })
+  })
+}
+
+
+// function* watchHello(){ //while(true) 와 같은 역할, 제너레이터 함수 넣어주기.
+//   yield takeEvery(HELLO_SAGA, function* (){
+//     yield put({
+//       type: 'BYE_SAGA'
+//     })
+//   })
+// }
+
+// function* watchHello(){
+//   while(true){
+//     yield take(HELLO_SAGA)
+//     console.log(1)
+//     console.log(2)
+//     console.log(3)
+//     console.log(4)
+//   }
+// }
+
 function* watchSignUp(){
 
 }
@@ -36,6 +64,7 @@ function* watchSignUp(){
 export default function* userSaga(){
   yield all([
     watchLogin(),
-    watchSignUp()
+    watchSignUp(),
+    watchHello()
   ])
 }
