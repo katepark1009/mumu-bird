@@ -31,7 +31,7 @@ MumuBird.propTypes = {
   store: PropTypes.object
 }
 
-export default withRedux((initialState, options)=>{ //여기서 부터는 바뀔 일이 거의 없는 부분, compose는 미들웨어 여러개 합성하는 역할
+const configureStore = (initialState, options) => { //여기서 부터는 바뀔 일이 거의 없는 부분, compose는 미들웨어 여러개 합성하는 역할
   const sagaMiddleware = createSagaMiddleware();
   const middlewares = [sagaMiddleware] //리덕스 사가 미들웨어 또는 thunk 등등이 바뀌는 부분이 바로 여기 나머지는 거의 변동 없음.
   const enhancer = compose( 
@@ -50,7 +50,9 @@ export default withRedux((initialState, options)=>{ //여기서 부터는 바뀔
   //   : compose( 
   //   applyMiddleware(...middlewares),
 
-  const store=createStore(reducer, initialState, enhancer)
+  const store = createStore(reducer, initialState, enhancer)
   sagaMiddleware.run(rootSaga)
   return store
-})(MumuBird) //기존 컴포넌트의 기능을 확장해주는 고차함수 사용, 이부분은 외우자....
+}
+
+export default withRedux(configureStore)(MumuBird) //기존 컴포넌트의 기능을 확장해주는 고차함수 사용, 이부분은 외우자....
