@@ -3,6 +3,7 @@ const dummyUser = {
   Post: [],
   Followings: [],
   Followers: [],
+  id: 1
 }
 
 const initialState = {

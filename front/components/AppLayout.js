@@ -28,7 +28,7 @@ const AppLayout = ({ children }) => {
         <Col xs={24} md={12}>
           {children}
         </Col>
-        <Col xs={24} md={6}>
+        <Col xs={6} md={6}>
           <a href='https://github.com/katepark1009/mumu-bird' target='_blank'>Made by Kate</a>
         </Col>
       </Row>

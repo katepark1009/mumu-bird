@@ -10,6 +10,15 @@ const initialState = {
   imagePath: [], //미리보기 이미지 경로
   addPostErrorReason: false, //포스트 업로드 실패 사유
   isAddingPost: false, //포스트 업로드 중
+  postAdded: false, //포스트 업로드 성공
+}
+
+const dummyPost = {
+  User: {
+    id: 1,
+    nickname: 'Kate',
+  },
+  content: '더미 포스트 입니다',
 }
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST' //포스트 업로드 
@@ -80,7 +89,25 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
   switch( action.type) {
     case ADD_POST_REQUEST: {
       return{
-        ...state
+        ...state,
+        isAddingPost: true,
+        addPostErrorReason: '',
+        postAdded: false
+      }
+    }
+    case ADD_POST_SUCCESS: {
+      return{
+        ...state,
+        isAddingPost: false,
+        mainPosts: [dummyPost, ...state.mainPosts], // 게시글 작성 성공시, 기존포스트 앞에 새 포스트가 추가됨.
+        postAdded: true
+      }
+    }
+    case ADD_POST_FAILURE: {
+      return{
+        ...state,
+        isAddingPost: false,
+        addPostErrorReason: action.error
       }
     }
     case ADD_DUMMY: {

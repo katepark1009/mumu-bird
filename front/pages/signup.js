@@ -1,8 +1,9 @@
-import React, { useState, useCallback, memo } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Form, Checkbox, Button, Input } from 'antd'
 import { useInput } from '../components/customHook/hooks'
 import { useDispatch, useSelector } from 'react-redux'
 import { SIGN_UP_REQUEST } from '../reducers/user'
+import Router from 'next/router'
 // const TextInput = memo(({value, onChange}) => {
 //   return (
 //     <Input name='user-id' value={value} required onChange={onchange} />
@@ -24,7 +25,14 @@ const Signup = () => {
   const [password, onChangePassword] = useInput('')
 
   const dispatch = useDispatch()
-  const { isSigningUp } = useSelector(state=> state.user)
+  const { isSigningUp, me } = useSelector(state=> state.user)
+
+  useEffect(()=>{ // 객체끼리 비교가 어렵기때문에 useEffect안에 넣지 말기
+    if(me) {
+      Router.push('/') // 내 정보가 있는 경우, next 라우터에서 메인 페이지로 이동
+    }
+  }, [me && me.id]) //객체가 undefined일수도 있으니까 &&으로 가드쳐주기
+
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     if (password !== passwordCheck) {
