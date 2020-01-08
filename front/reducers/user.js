@@ -6,14 +6,29 @@ const dummyUser = {
 }
 
 const initialState = {
-  isLoggedIn: false,
-  user: null,
-  signUpData: {}
+  isLoggedIn: false, //로그인 여부
+
+  isLoggingOut: false, //로그아웃 시도중
+  isLoggingIn: false, //로그인 시도중
+  logInErrorReason: '', //로그인 실패 사유
+
+  isSignedUp: false, //회원가입성공
+  isSigningUp: false, // 회원가입 시도중
+  signUpErrorReason: '', //회원가입 실패 사유
+
+  me: null, //내정보
+  followingList: [], //팔로잉 리스트
+  followerList: [], //팔로워 리스트
+  userInfo: null //남의 정보
 }
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST' //비동기 액션 이름 -> REQUEST, SUCCESS, FAILURE 세가지 붙으면 리덕스 사가 써야겠구나~
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS'
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE'
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST' //사용자 정보 불러오기
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS'
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE'
 
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST' 
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS'
@@ -23,57 +38,83 @@ export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST'
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE'
 
-export const HELLO_SAGA='HELLO_SAGA' //동기 액션 이름 -> 리덕스만으로 처리가능~
-export const BYE_SAGA='BYE_SAGA'
+export const LOAD_FOLLOW_REQUEST = 'LOAD_FOLLOW_REQUEST' //팔로우, 팔로워 목록 불러오기
+export const LOAD_FOLLOW_SUCCESS = 'LOAD_FOLLOW_SUCCESS'
+export const LOAD_FOLLOW_FAILURE = 'LOAD_FOLLOW_FAILURE'
 
-export const loginAction = { //type: 액션이름, 데이터 함께 넣어줌 //state같은 역할
-  type: LOG_IN_REQUEST,
-  data: dummyUser
-}
+export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST' //팔로우
+export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS'
+export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE'
 
-export const logoutAction = { //type: 액션이름, 데이터 함께 넣어줌 //state같은 역할
-  type: LOG_OUT_REQUEST
-}
+export const UNFOLLOW_USER_REQUEST = 'UNFOLLOW_USER_REQUEST' // 언 팔로우
+export const UNFOLLOW_USER_SUCCESS = 'UNFOLLOW_USER_SUCCESS'
+export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE'
 
-export const signUpAction = data => ( 
-//action에 넣을 데이터가 동적인 경우 action은 함수로 만들어야 함.
-{
-    type: SIGN_UP_REQUEST,
-    data: data
-})
+export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST' // 팔로워 중에 지우고 싶으면 지우게 
+export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS'
+export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE'
 
-export const signUpSuccess = {
-  type: SIGN_UP_SUCCESS
-}
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME' //! 중요, 리듀서 단점때문에 만든 액션 
 
 const reducer = ( state = initialState, action) => { //액션이 들어왔을때 다음 state를 어떻게 바꿔줄지 //setstate같은 역할
   switch( action.type) {
+    //----------------로그인 사이클
     case LOG_IN_REQUEST: {
-      return{
+      return {
         ...state,
-        loginData: action.data,
-        isLoading: true
+        isLoggingIn: true,
+        logInErrorReason: ''
       }
     }
     case LOG_IN_SUCCESS: {
       return{
         ...state,
+        isLoggingIn: false,
         isLoggedIn: true,
-        user: dummyUser,
+        me: dummyUser,
         isLoading: false
       }
     }
+    case LOG_IN_FAILURE: {
+      return{
+        ...state,
+        isLoggingIn: false,
+        isLoggedIn: false,
+        me: null,
+        logInErrorReason: action.error
+      }
+    }
+    //-----------------로그인 사이클
+
     case LOG_OUT_REQUEST: {
       return{
         ...state,
         isLoggedIn: false,
-        user: null
+        me: null
       }
     }
+
+    //-----------------sign up 사이클
     case SIGN_UP_REQUEST : {
       return{
         ...state,
-        signUpData: action.data
+        isSigningUp: true,
+        isSignedUp: false,
+        signUpErrorReason: ''
+      }
+    }
+    case SIGN_UP_SUCCESS : {
+      return{
+        ...state,
+        isSigningUp: false,
+        isSignedUp: true
+      }
+    }
+    case SIGN_UP_FAILURE : {
+      return{
+        ...state,
+        isSigningUp: false,
+        signUpErrorReason: action.error
       }
     }
     default: {

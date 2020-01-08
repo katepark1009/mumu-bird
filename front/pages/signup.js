@@ -1,8 +1,8 @@
 import React, { useState, useCallback, memo } from 'react'
 import { Form, Checkbox, Button, Input } from 'antd'
 import { useInput } from '../components/customHook/hooks'
-import { useDispatch } from 'react-redux'
-import { signUpAction } from '../reducers/user'
+import { useDispatch, useSelector } from 'react-redux'
+import { SIGN_UP_REQUEST } from '../reducers/user'
 // const TextInput = memo(({value, onChange}) => {
 //   return (
 //     <Input name='user-id' value={value} required onChange={onchange} />
@@ -24,7 +24,7 @@ const Signup = () => {
   const [password, onChangePassword] = useInput('')
 
   const dispatch = useDispatch()
-
+  const { isSigningUp } = useSelector(state=> state.user)
   const onSubmit = useCallback((e) => {
     e.preventDefault()
     if (password !== passwordCheck) {
@@ -33,11 +33,12 @@ const Signup = () => {
     if (!term) {
       return setTermError(true)
     }
-    dispatch(signUpAction({
-      id,
-      password,
-      nick,
-    }))
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: {
+        id, password, nick
+      }
+    })
   }, [password, passwordCheck, term])
 
   const onChangePasswordCheck = useCallback((e) => {
@@ -84,7 +85,7 @@ const Signup = () => {
           {termError && <div style={{ color: 'red' }}>Please check agree.</div>}
         </div>
         <div style={{ marginTop: 10 }}>
-          <Button type='primary' htmlType='submit'>Join</Button>
+          <Button type='primary' htmlType='submit' loading={isSigningUp}>Join</Button>
         </div>
       </Form>
     </>
