@@ -1,24 +1,41 @@
 const initialState = {
   mainPosts: [{
+    id: 1,
     User: {
       id: 1,
       nickname: 'Kate',
     },
     content: 'fisrt post test',
-    img: 'https://storep-phinf.pstatic.net/linesweet_01/original_8.gif?type=pa50_50'
+    img: 'https://storep-phinf.pstatic.net/linesweet_01/original_8.gif?type=pa50_50',
+    Comments: []
   }], // 화면에 보일 포스트들
   imagePath: [], //미리보기 이미지 경로
   addPostErrorReason: false, //포스트 업로드 실패 사유
   isAddingPost: false, //포스트 업로드 중
   postAdded: false, //포스트 업로드 성공
+  isAddingComment: false, //댓글 추가 중
+  addCommentErrorReason: '',
+  commentAdded: false
 }
 
 const dummyPost = {
+  id: 18,
   User: {
     id: 1,
     nickname: 'Kate',
   },
   content: '더미 포스트 입니다',
+  Comments: []
+}
+
+const dummyComment = {
+  id: 7,
+  User: {
+    id: 1,
+    nickname: 'Kate comment dummy',
+  },
+  content: '더미 댓글 입니다',
+  createdAt: new Date()
 }
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST' //포스트 업로드 
@@ -110,6 +127,37 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
         addPostErrorReason: action.error
       }
     }
+
+    // 댓글 추가 기능
+    case ADD_COMMENT_REQUEST: {
+      return{
+        ...state,
+        isAddingComment: true,
+        addCommentErrorReason: '',
+        commentAdded: false
+      }
+    }
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v=> v.id === action.data.postId) //action은 success에 대한 액션!
+      const post = state.mainPosts[postIndex] //아이디 맞는 포스트 1개 
+      const Comments = [...post.Comments, dummyComment] //원래 있던 댓글에 새로운 댓글 추가,... 불변성 지키기 위해 -> 나중에 immer 라이브러리 사용 push를 못쓰기때문에.
+      const mainPosts = [...state.mainPosts] //메인 포스트 복사
+      mainPosts[postIndex] = {...post, Comments} //복사한 메인 포스트 해당 포스트 1개 찾아서, Comment만 업데이트!
+      return{
+        ...state,
+        isAddingComment: false,
+        mainPosts, //복사해서 댓글 업뎃 된 메인포스트들 다시 리턴
+        commentAdded: true
+      }
+    }
+    case ADD_COMMENT_FAILURE: {
+      return{
+        ...state,
+        isAddingComment: false,
+        addCommentErrorReason: action.error
+      }
+    }
+
     case ADD_DUMMY: {
       return{
         ...state,
