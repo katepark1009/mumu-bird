@@ -72,7 +72,7 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
         ...state,
         isLoggingIn: false,
         isLoggedIn: true,
-        me: dummyUser,
+        me: action.data,
         isLoading: false
       }
     }
