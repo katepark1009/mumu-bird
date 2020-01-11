@@ -44,10 +44,12 @@ const Signup = () => {
     dispatch({
       type: SIGN_UP_REQUEST,
       data: {
-        id, password, nick
+        userId : id, 
+        password, 
+        nickname: nick
       }
     })
-  }, [password, passwordCheck, term])
+  }, [id, nick, password, passwordCheck, term]) //! usecallback 안에서 쓰이는 state들은 다 [] 안에 적어줘야 함
 
   const onChangePasswordCheck = useCallback((e) => {
     setPasswordError(e.target.value !== password)

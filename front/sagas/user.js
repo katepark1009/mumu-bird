@@ -1,11 +1,21 @@
-import { all, delay, put, take, takeLatest, takeEvery, fork } from 'redux-saga/effects'
-import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from '../reducers/user'
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects'
+import {
+  LOAD_USER_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOG_IN_FAILURE,
+  LOG_IN_REQUEST,
+  LOG_IN_SUCCESS,
+  LOG_OUT_FAILURE,
+  LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
+  SIGN_UP_FAILURE,
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+} from '../reducers/user';
 import axios from 'axios'
 
 function loginAPI(){ //서버에 요청을 보내는 부분
-}
-
-function signUpAPI(){ //서버에 요청을 보내는 부분
 }
 
 function* login(){
@@ -28,11 +38,18 @@ function* watchLogin(){
   yield takeEvery(LOG_IN_REQUEST, login) //로그인 액션이 들어오면
 }
 
-function* signUp(){
+
+
+
+function signUpAPI(signUpData){ //서버에 요청을 보내는 부분
+  return axios.post('http://localhost:3065/api/user', signUpData)
+}
+
+function* signUp(action){ //action에 id, pass, nick이 들어있는 거임.
   try{
     //yield fork(logger) 로그인 기록하는 logger라는 10초 걸리는 가상 함수가 있다고 할때, 기다리지 않고 넘어갈 수 있도록. 
     //yield call(loginAPI)  //서버에 요청, call은 요청이 끝나야지 다음으로 넘어감 -> 에러시 catch로 넘어감.
-    yield delay(2000)
+    yield call(signUpAPI, action.data)
     yield put({ //put은 리덕스의 dispatch와 동일,
       type: SIGN_UP_SUCCESS
     })
@@ -48,6 +65,8 @@ function* signUp(){
 function* watchSignUp(){
   yield takeEvery(SIGN_UP_REQUEST, signUp) //로그인 액션이 들어오면
 }
+
+
 
 export default function* userSaga(){
   yield all([ //all은 동시에 실행함
