@@ -20,7 +20,9 @@ axios.defaults.baseURL = 'http://localhost:3065/api'
 // login cycle
 
 function loginAPI(loginData){ //서버에 요청을 보내는 부분
-  return axios.post('/user/login', loginData)
+  return axios.post('/user/login', loginData, {
+    withCredentials: true //이 부분을 적어줘야 서로 쿠키 주고받기 가능
+  })
 }
 
 function* login(action){
@@ -28,7 +30,7 @@ function* login(action){
     //yield fork(logger) 로그인 기록하는 logger라는 10초 걸리는 가상 함수가 있다고 할때, 기다리지 않고 넘어갈 수 있도록. 
     const result = yield call(loginAPI, action.data)  //서버에 요청, call은 요청이 끝나야지 다음으로 넘어감 -> 에러시 catch로 넘어감.
     //axios 응답에서 받은 데이터를 result안에 저장
-    
+    console.log(result)
     yield put({ //put은 리덕스의 dispatch와 동일,
       type: LOG_IN_SUCCESS, 
       data: result.data //사용자 정보 들어있는 부분
@@ -49,7 +51,7 @@ function* watchLogin(){
 // sign up cycle
 
 function signUpAPI(signUpData){ //서버에 요청을 보내는 부분
-  return axios.post('/user', signUpData)
+  return axios.post('/user/', signUpData)
 }
 
 function* signUp(action){ //action에 id, pass, nick이 들어있는 거임.
@@ -73,10 +75,73 @@ function* watchSignUp(){
   yield takeEvery(SIGN_UP_REQUEST, signUp) //로그인 액션이 들어오면
 }
 
+// log out cycle
+
+function LogOutAPI(){ //서버에 요청을 보내는 부분
+  return axios.get('/user/logout', {}, {
+    withCredentials: true
+  })
+}
+
+function* LogOut(){ //action에 id, pass, nick이 들어있는 거임.
+  try{
+    //yield fork(logger) 로그인 기록하는 logger라는 10초 걸리는 가상 함수가 있다고 할때, 기다리지 않고 넘어갈 수 있도록. 
+    //yield call(loginAPI)  //서버에 요청, call은 요청이 끝나야지 다음으로 넘어감 -> 에러시 catch로 넘어감.
+    yield call(LogOutAPI)
+    yield put({ //put은 리덕스의 dispatch와 동일,
+      type: LOG_OUT_SUCCESS
+    })
+  } catch(e) { //loginAPI 실패
+    console.error(e)
+    yield put({ 
+      type: LOG_OUT_FAILURE,
+      error: e 
+    })
+  }
+}
+
+function* watchLogOut(){
+  yield takeEvery(LOG_OUT_REQUEST, LogOut) //로그인 액션이 들어오면
+}
+
+
+// load user cycle
+
+function loadUserAPI(userId){ //서버에 요청을 보내는 부분
+  return axios.get(userId? `/user/${userId}` : '/user/', {}, {
+    withCredentials: true
+  })
+}
+
+function* loadUser(action){ //action에 id, pass, nick이 들어있는 거임.
+  try{
+    //yield fork(logger) 로그인 기록하는 logger라는 10초 걸리는 가상 함수가 있다고 할때, 기다리지 않고 넘어갈 수 있도록. 
+    //yield call(loginAPI)  //서버에 요청, call은 요청이 끝나야지 다음으로 넘어감 -> 에러시 catch로 넘어감.
+    const result = yield call(loadUserAPI, action.data)
+    yield put({ //put은 리덕스의 dispatch와 동일,
+      type: LOAD_USER_SUCCESS,
+      data: result.data, // 이 데
+      me: !action.data
+    })
+  } catch(e) { //loginAPI 실패
+    console.error(e)
+    yield put({ 
+      type: LOAD_USER_FAILURE,
+      error: e 
+    })
+  }
+}
+
+function* watchloadUser(){
+  yield takeEvery(LOAD_USER_REQUEST, loadUser) //로그인 액션이 들어오면
+}
+
 export default function* userSaga(){
   yield all([ //all은 동시에 실행함
     fork(watchLogin),
     fork(watchSignUp), //순서가 상관 없기때문에 fork사용하는 것임.
+    fork(watchLogOut),
+    fork(watchloadUser)
   ])
 }
 

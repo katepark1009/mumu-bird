@@ -85,16 +85,21 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
         logInErrorReason: action.error
       }
     }
-    //-----------------로그인 사이클
+    //-----------------로그아웃 사이클
 
-    case LOG_OUT_REQUEST: {
+    case LOG_OUT_SUCCESS: {
       return{
         ...state,
-        isLoggedIn: false,
+        isLoggedOut: true,
+      }
+    }
+    case LOG_OUT_SUCCESS: {
+      return{
+        ...state,
+        isLoggedOut: false,
         me: null
       }
     }
-
     //-----------------sign up 사이클
     case SIGN_UP_REQUEST : {
       return{
@@ -116,6 +121,30 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
         ...state,
         isSigningUp: false,
         signUpErrorReason: action.error
+      }
+    }
+
+    //-----------------load user 사이클
+    case LOAD_USER_REQUEST : {
+      return{
+        ...state,
+      }
+    }
+    case LOAD_USER_SUCCESS : {
+      if( action. me){
+        return{
+          ...state,
+          me: action.data
+        }
+      }
+      return {
+        ...state,
+        userInfo: action.data
+      }
+    }
+    case LOAD_USER_FAILURE : {
+      return{
+        ...state,
       }
     }
     default: {
