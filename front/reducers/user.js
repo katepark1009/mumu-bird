@@ -7,7 +7,7 @@ const dummyUser = {
 }
 
 const initialState = {
-  isLoggedIn: false, //로그인 여부
+  //isLoggedIn: false, //로그인 여부
 
   isLoggingOut: false, //로그아웃 시도중
   isLoggingIn: false, //로그인 시도중
@@ -71,7 +71,7 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
       return{
         ...state,
         isLoggingIn: false,
-        isLoggedIn: true,
+        //isLoggedIn: true,
         me: action.data,
         isLoading: false
       }
@@ -80,14 +80,14 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
       return{
         ...state,
         isLoggingIn: false,
-        isLoggedIn: false,
+        //isLoggedIn: false,
         me: null,
         logInErrorReason: action.error
       }
     }
     //-----------------로그아웃 사이클
 
-    case LOG_OUT_SUCCESS: {
+    case LOG_OUT_REQUEST: {
       return{
         ...state,
         isLoggedOut: true,
@@ -125,32 +125,26 @@ const reducer = ( state = initialState, action) => { //액션이 들어왔을때
     }
 
     //-----------------load user 사이클
-    case LOAD_USER_REQUEST : {
-      return{
-        ...state,
-      }
-    }
-    case LOAD_USER_SUCCESS : {
-      if( action. me){
-        return{
-          ...state,
-          me: action.data
-        }
-      }
+    case LOAD_USER_REQUEST: {
       return {
         ...state,
-        userInfo: action.data
-      }
+      };
     }
-    case LOAD_USER_FAILURE : {
-      return{
+    case LOAD_USER_SUCCESS: {
+      return {
         ...state,
-      }
+        me: action.data,
+      };
+    }
+    case LOAD_USER_FAILURE: {
+      return {
+        ...state,
+      };
     }
     default: {
-      return{
-        ...state
-      }
+      return {
+        ...state,
+      };
     }
   }
 }
