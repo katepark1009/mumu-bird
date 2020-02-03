@@ -53,7 +53,17 @@ const PostCard = ({ post }) => {
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
           title={post.User.nickname}
-          description={post.content}
+          description={(
+          <div> 
+            {post.content.split(/(#[^\s]+)/g).map((v) => { // 컴포넌트 안에 링크 넣고 싶은 경우
+              if (v.match(/#[^\s]+/)) {
+                return (
+                  <Link href={`/hashtag/${v.slice(1)}`} key={v}><a>{v}</a></Link> )
+              }
+              return v
+            })}
+          </div>
+          )} // <a> tag 대신 next에서는 무조건 Link 태그 사용
         />
       </Card>
       {commentFormOpened && (
