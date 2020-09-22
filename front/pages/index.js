@@ -9,7 +9,7 @@ const Home = () => {
   // const { user } = useSelector(state=> state.user.user) //전체 state에서 user만 가져오는 것, user 안에는  `isLoggedIn: false, user: {}` 가 있음. 전체 스테이트에서 분해해서 사용가능
   const { me } = useSelector(state=> state.user) //잘게 쪼개는게 좋음. 리랜더링 되는거 방지
   const { mainPosts } = useSelector(state=> state.post)
-  //console.log('isLoggedIn', isLoggedIn)
+
   useEffect(()=> {
     dispatch({
       type: LOAD_MAIN_POSTS_REQUEST,
