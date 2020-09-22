@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PostForm from '../components/PostForm'
 import PostCard from '../components/PostCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginAction, logoutAction } from '../reducers/user'
+import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -11,11 +11,9 @@ const Home = () => {
   const { mainPosts } = useSelector(state=> state.post)
   //console.log('isLoggedIn', isLoggedIn)
   useEffect(()=> {
-    // dispatch({
-    //   type: 'HELLO_SAGA'
-    // })
-
-    //dispatch(logoutAction)
+    dispatch({
+      type: LOAD_MAIN_POSTS_REQUEST,
+    });
   }, []) // [] 패스하면 componentdidmount랑 똑같음. 컴포넌트가 첫번째 랜더링 될때, 이 액션이 디스패치 됨.
   return (
     <div>

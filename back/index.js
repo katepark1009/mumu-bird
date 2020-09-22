@@ -11,6 +11,7 @@ const db = require('./models');
 const userAPIRouter = require('./routes/user');
 const postAPIRouter = require('./routes/post');
 const postsAPIRouter = require('./routes/posts');
+const hashtagAPIRouter = require('./routes/hashtag');
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ db.sequelize.sync();
 passportConfig();
 
 app.use(morgan('dev'));
+app.use('/', express.static('uploads')); // upload를 root로 사용할 수 있게 '/'붙여줌
 app.use(cors({
   origin: true,
   credentials: true,
@@ -43,6 +45,7 @@ app.use(passport.session());
 app.use('/api/user', userAPIRouter);
 app.use('/api/post', postAPIRouter);
 app.use('/api/posts', postsAPIRouter);
+app.use('/api/hashtag', hashtagAPIRouter);
 
 app.listen(3065, () => {
   console.log('server is running on http://localhost:3065');

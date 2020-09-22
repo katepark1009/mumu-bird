@@ -3,10 +3,13 @@ const db = require('../models');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => { // GET /api/posts
+router.get('/:tag', async (req, res, next) => {
   try {
     const posts = await db.Post.findAll({
       include: [{
+        model: db.Hashtag,
+        where: { name: decodeURIComponent(req.params.tag) }, //한글, 특수문자가 주소로 서버로 갈때 uri컴포넌트로 바뀌어서 -> 디코딩 필요, 정상적으로 출력하기위해
+      }, {
         model: db.User,
         attributes: ['id', 'nickname'],
       }, {
@@ -26,7 +29,6 @@ router.get('/', async (req, res, next) => { // GET /api/posts
           model: db.Image,
         }],
       }],
-      order: [['createdAt', 'DESC']], // DESC는 내림차순, ASC는 오름차순 -> 최신것부터 가져오기
     });
     res.json(posts);
   } catch (e) {

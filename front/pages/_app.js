@@ -12,15 +12,17 @@ import { createStore, compose, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../sagas'
 
-const MumuBird = ({Component, store}) => {
+const MumuBird = ({Component, store, pageProps}) => {
   return (
     <Provider store={store}>
       <Head>
         <title>MumuBirrrrrd</title>
+        <link rel="stylesheet" type="text/css" charSet="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/antd/3.25.3/antd.css' />
       </Head> 
       <AppLayout>
-        <Component /> 
+        <Component {...pageProps} /> 
       </AppLayout>
     </Provider>
   )
@@ -30,6 +32,16 @@ MumuBird.propTypes = {
   Component: PropTypes.elementType, //node는 랜더링 될 수 있는 모든 것
   store: PropTypes.object
 }
+
+MumuBird.getInitialProps = async (context) => {
+  console.log(context);
+  const { ctx, Component } = context;
+  let pageProps = {};
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+  return { pageProps };
+};
 
 const configureStore = (initialState, options) => { //여기서 부터는 바뀔 일이 거의 없는 부분, compose는 미들웨어 여러개 합성하는 역할
   const sagaMiddleware = createSagaMiddleware();
