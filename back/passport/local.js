@@ -11,14 +11,14 @@ module.exports = () => {
     try {
       const user = await db.User.findOne({ where: { userId }})
       if(!user) {
-        return done(null, false, {reason: 'No user found'}) 
+        return done(null, false, {reason: 'No user found!'}) 
         //done( 첫번째는 서버쪽 에러가 나면 1을 넣어줌, 두번째는 성공시, 세번째는 로직상 에러인 경우)
       }
       const result = await bcrypt.compare(password, user.password) // 프론트의 비번과 서버쪽 비번 비교\
       if(result) {
         return done(null, user) //성공시 유저 정보 전달
       }
-      return done(null, false, {reason: 'wrong passwrod!'})
+      return done(null, false, {reason: 'wrong password!'})
     } catch(e) {
       console.error(e)
       return done(e) // 서버 에러는 done의 첫번째 인수에 담아서 보내줌.

@@ -13,6 +13,10 @@ import Router from 'next/router'
 //antd에서 Input이 일반 component여서 memo를 사용해서 
 //pure component가 적용 안된 일반 component를 강제로 변환, 해당 인풋이 변할때만 랜더링 되도록 할 수 있음.
 
+const SignupError = styled.div`
+  color: red;
+`;
+
 const Signup = () => {
   const [passwordCheck, setPasswordCheck] = useState('')
   const [term, setTerm] = useState(false)
@@ -29,6 +33,7 @@ const Signup = () => {
 
   useEffect(()=>{ // 객체끼리 비교가 어렵기때문에 useEffect안에 넣지 말기
     if(me) {
+      alert('로그인 했으니 메인페이지로 이동')
       Router.push('/') // 내 정보가 있는 경우, next 라우터에서 메인 페이지로 이동
     }
   }, [me && me.id]) //객체가 undefined일수도 있으니까 &&으로 가드쳐주기
@@ -69,6 +74,9 @@ const Signup = () => {
     term
   })
 
+  if(me) { // 로그인 상태시 화면 감춤
+    return null
+  }
 
   return (
     <>
@@ -88,11 +96,11 @@ const Signup = () => {
         <div>
           <label htmlFor='user-password-check'>Check Password</label>
           <Input name='user-password-check' type='password' value={passwordCheck} required onChange={onChangePasswordCheck} />
-          {passwordError && <div style={{ color: 'red' }}>Password is not matched.</div>}
+          {passwordError && <SignupError>Password is not matched.</SignupError>}
         </div>
         <div>
           <Checkbox name='user-term' checked={term} onChange={onChangeTerm}>agree with terms</Checkbox>
-          {termError && <div style={{ color: 'red' }}>Please check agree.</div>}
+          {termError && <SignupError>Please check agree.</SignupError>}
         </div>
         <div style={{ marginTop: 10 }}>
           <Button type='primary' htmlType='submit' loading={isSigningUp}>Join</Button>

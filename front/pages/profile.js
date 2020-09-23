@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { Button, List, Card, Icon } from 'antd';
 import NicknameEditForm from '../components/NicknameEditForm'
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,29 +9,13 @@ import {
   UNFOLLOW_USER_REQUEST,
 } from '../reducers/user';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
-import PostCard from '../components/PostCard';
+import PostCard from '../containers/PostCard';
+import FollowList from '../components/FollowList';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { me, followingList, followerList } = useSelector(state => state.user);
+  const { followingList, followerList, hasMoreFollowing, hasMoreFollower } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
-
-  useEffect(() => {
-    if (me) {
-      dispatch({
-        type: LOAD_FOLLOWERS_REQUEST,
-        data: me.id,
-      });
-      dispatch({
-        type: LOAD_FOLLOWINGS_REQUEST,
-        data: me.id,
-      });
-      dispatch({
-        type: LOAD_USER_POSTS_REQUEST,
-        data: me.id,
-      });
-    }
-  }, [me && me.id]);
 
   const onUnfollow = useCallback(userId => () => {
     dispatch({
@@ -47,40 +31,36 @@ const Profile = () => {
     });
   }, []);
 
+  const loadMoreFollowings = useCallback(() => {
+    dispatch({
+      type: LOAD_FOLLOWINGS_REQUEST,
+      offset: followingList.length,
+    });
+  }, [followingList.length]);
+
+  const loadMoreFollowers = useCallback(() => {
+    dispatch({
+      type: LOAD_FOLLOWERS_REQUEST,
+      offset: followerList.length,
+    });
+  }, [followerList.length]);
+
   return (
     <div>
       <NicknameEditForm />
-      <List 
-        style={{ marginBottom: '20px'}}
-        grid={{ gutter: 4, xs: 2, md: 3}}
-        size='small'
-        header={<div>following</div>}
-        loadMore={<Button style={{width: '100%'}}>More</Button>}
-        bordered
-        dataSource={followingList}
-        renderItem={ item => (
-          <List.Item style={{ marginTop: '20px' }}>
-            <Card actions={[<Icon key="stop" type="stop" onClick={onUnfollow(item.id)} />]}>
-              <Card.Meta description={item.nickname} />
-            </Card>
-          </List.Item>
-        )}
+      <FollowList
+        header="팔로잉 목록"
+        hasMore={hasMoreFollowing}
+        onClickMore={loadMoreFollowings}
+        data={followingList}
+        onClickStop={onUnfollow}
       />
-      <List 
-        style={{ marginBottom: '20px'}}
-        grid={{ gutter: 4, xs: 2, md: 3}}
-        size='small'
-        header={<div>followers</div>}
-        loadMore={<Button style={{width: '100%'}}>More</Button>}
-        bordered
-        dataSource={followerList}
-        renderItem={ item => (
-          <List.Item style={{ marginTop: '20px' }}>
-            <Card actions={[<Icon key="stop" type="stop" onClick={onRemoveFollower(item.id)} />]}>
-              <Card.Meta description={item.nickname} />
-            </Card>
-          </List.Item>
-        )}
+      <FollowList
+        header="팔로워 목록"
+        hasMore={hasMoreFollower}
+        onClickMore={loadMoreFollowers}
+        data={followerList}
+        onClickStop={onRemoveFollower}
       />
       <div>
         {mainPosts.map(c => (
@@ -90,5 +70,25 @@ const Profile = () => {
     </div>
   )
 }
+
+Profile.getInitialProps = async (context) => {
+  const state = context.store.getState();
+  // 이 직전에 LOAD_USERS_REQUEST
+  context.store.dispatch({
+    type: LOAD_FOLLOWERS_REQUEST,
+    data: state.user.me && state.user.me.id,
+  });
+  context.store.dispatch({
+    type: LOAD_FOLLOWINGS_REQUEST,
+    data: state.user.me && state.user.me.id,
+  });
+  context.store.dispatch({
+    type: LOAD_USER_POSTS_REQUEST,
+    data: state.user.me && state.user.me.id,
+  });
+
+  // 이 쯤에서 LOAD_USERS_SUCCESS 돼서 me가 생김.
+};
+
 
 export default Profile
