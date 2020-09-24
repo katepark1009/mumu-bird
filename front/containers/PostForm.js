@@ -6,6 +6,7 @@ import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reduce
 const PostForm = () => {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
+
   const { imagePaths, isAddingPost, postAdded } = useSelector(state => state.post);
   const imageInput = useRef();
 
@@ -60,11 +61,13 @@ const PostForm = () => {
 
   return (
     <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onSubmit={onSubmitForm}>
-      <Input.TextArea maxLength={140} placeholder="어떤 신기한 일이 있었나요?" value={text} onChange={onChangeText} />
+      <Input.TextArea maxLength={140} placeholder="What's happening?" value={text} onChange={onChangeText} />
       <div>
-      <input type="file" multiple hidden ref={imageInput} onChange={onChangeImages} />
-        <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button type="primary" style={{ float: 'right' }} htmlType="submit" loading={isAddingPost}>짹짹</Button>
+        <input type="file" multiple hidden ref={imageInput} onChange={onChangeImages} />
+          <Button onClick={onClickImageUpload}>
+            Image upload
+          </Button>
+          <Button type="primary" style={{ float: 'right' }} htmlType="submit" loading={isAddingPost}>Tweet</Button>
       </div>
       <div>
         {imagePaths.map((v, i) => (

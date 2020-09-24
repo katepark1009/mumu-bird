@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import { Twemoji } from 'react-emoji-render';
 
 const PostCardContent = ({ postData }) => {
   return (
@@ -13,11 +14,11 @@ const PostCardContent = ({ postData }) => {
               as={`/hashtag/${v.slice(1)}`}
               key={v}
             >
-              <a>{v}</a>
+              <a><Twemoji text={v} /></a>
             </Link>
           );
         }
-        return v;
+        return <Twemoji text={v} />;
       })}
     </div>
   );

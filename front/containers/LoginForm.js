@@ -10,6 +10,11 @@ import { LOG_IN_REQUEST } from '../reducers/user'
 const LoginError = styled.div`
   color: red;
 `;
+const ButtonContainer = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+`;
 
 const LoginForm = () => {
   const [id, onChangeId] = useInput('')
@@ -44,10 +49,10 @@ const LoginForm = () => {
           <Input name='user-password' type='password' value={password} onChange={onChangePassword} required />
         </div>
         <LoginError>{logInErrorReason}</LoginError>
-        <div style={{marginTop: '10px'}}>
+        <ButtonContainer>
           <Button type='primary' htmlType='submit' loading={isLoggingIn}>Log in</Button>
           <Link href='/signup'><Button>Sign in</Button></Link>
-        </div>
+        </ButtonContainer>
       </Form>
     </div>
   )

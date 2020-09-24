@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const FollowList = memo(({ header, hasMore, onClickMore, data, onClickStop }) => {
   return (
     <List
-      style={{ marginBottom: '20px' }}
+      style={{ marginBottom: '20px', border: '1px solid #91b7e6' }}
       grid={{ gutter: 4, xs: 2, md: 3 }}
       size="small"
       header={<div>{header}</div>}

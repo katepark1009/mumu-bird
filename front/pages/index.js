@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef } from 'react'
-import PostForm from '../components/PostForm'
+import PostForm from '../containers/PostForm'
 import PostCard from '../containers/PostCard'
 import { useDispatch, useSelector } from 'react-redux'
 import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
@@ -36,15 +36,10 @@ const Home = () => {
       window.removeEventListener('scroll', onScroll);
     };
   }, [mainPosts.length]);
-  // useEffect(()=> {
-  //   dispatch({
-  //     type: LOAD_MAIN_POSTS_REQUEST,
-  //   });
-  // }, []) 
-  // [] 패스하면 componentdidmount랑 똑같음. 컴포넌트가 첫번째 랜더링 될때, 이 액션이 디스패치 됨.
+
   return (
     <div>
-      {/* {user ? <div>로그인 했습니다. {user.nickname}</div> : <div>로그아웃 했습니다.</div>} */}
+      <h1>Home</h1>
       {me && <PostForm />}
       {mainPosts.map((c, i)=>{
         return(

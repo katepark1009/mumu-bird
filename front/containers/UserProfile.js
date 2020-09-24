@@ -1,44 +1,58 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'next/link';
-import { Avatar, Card, Button } from 'antd'
-import { useSelector, useDispatch } from 'react-redux'
-import { LOG_OUT_REQUEST } from '../reducers/user'
+import { Avatar, Card } from 'antd'
+import { useSelector } from 'react-redux'
+import styled from 'styled-components'
+
+const WhiteText = styled.div`
+  color: white;
+  font-size: .7rem;
+`
+const NumberText = styled.div`
+  color: #23abe2;
+  font-weight: 800;
+  font-size: 1.1rem;
+`
+const Profile = styled.img`
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+`
 
 const UserProfile = () => {
   const { me } = useSelector(state=> state.user)
-  const dispatch = useDispatch()
-
-  const onLogOut = useCallback( ()=> {
-    dispatch({
-      type: LOG_OUT_REQUEST
-    })
-  }, []) // prop으로 자식에게 전달하기 때문에 usecallback으로 감싸줌.
   return (
     <Card
+      style={{ marginBottom: '20px' }}
       actions={[
         <Link href="/profile" key="twit">
           <a>
-            <div>짹짹<br />{me.Posts.length}</div>
+            <NumberText>{me.Posts.length}</NumberText>
+            <WhiteText>TWEETS</WhiteText>
           </a>
         </Link>,
         <Link href="/profile" key="following">
           <a>
-            <div>팔로잉<br />{me.Followings.length}</div>
+            <NumberText>{me.Followings.length}</NumberText>
+            <WhiteText>{me.Followings.length > 1 ? 'FOLLOWINGS' : 'FOLLOWING'}</WhiteText>
           </a>
         </Link>,
         <Link href="/profile" key="follower">
           <a>
-            <div>팔로워<br />{me.Followers.length}</div>
+            <NumberText>{me.Followers.length}</NumberText>
+            <WhiteText>{me.Followers.length > 1 ? 'FOLLOWERS' : 'FOLLOWER'}</WhiteText>
           </a>
         </Link>,
       ]}
     >
       <Card.Meta
-        avatar={<Avatar>{me.nickname[0]}</Avatar>}
-        title={me.nickname}
+        style={{ height: '80px', display: 'flex', alignItems: 'center' }}
+        avatar={<Profile src={'/profile-placeholder.png'} width={50} />}
+        title={<div style={{ marginRight: '20px' }}>{me.nickname}</div>}
+        description="This is the description"
       />
-      <Button onClick={onLogOut}>Log Out</Button>
     </Card>
   )
 }

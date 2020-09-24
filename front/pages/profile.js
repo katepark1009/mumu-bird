@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useRef } from 'react';
 import { Button, List, Card, Icon } from 'antd';
-import NicknameEditForm from '../components/NicknameEditForm'
+import NicknameEditForm from '../containers/NicknameEditForm'
 import { useDispatch, useSelector } from 'react-redux';
 import {
   LOAD_FOLLOWERS_REQUEST,

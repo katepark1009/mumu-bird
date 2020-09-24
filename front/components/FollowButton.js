@@ -8,8 +8,8 @@ const FollowButton = memo(({ post, onUnfollow, onFollow }) => {
   return !me || post.User.id === me.id
     ? null
     : me.Followings && me.Followings.find(v => v.id === post.User.id)
-      ? <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
-      : <Button onClick={onFollow(post.User.id)}>팔로우</Button>;
+      ? <Button size='small' onClick={onUnfollow(post.User.id)}>Unfollow</Button>
+      : <Button size='small' onClick={onFollow(post.User.id)}>Follow</Button>;
 });
 
 FollowButton.propTypes = {

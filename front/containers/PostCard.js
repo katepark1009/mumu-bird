@@ -5,9 +5,6 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import moment from 'moment';
-
-moment.locale('ko');
-
 import { 
   ADD_COMMENT_REQUEST, 
   LOAD_COMMENTS_REQUEST, 
@@ -21,6 +18,8 @@ import PostImages from '../components/PostImages'
 import PostCardContent from '../components/PostCardContent';
 import CommentForm from './CommentForm';
 import FollowButton from '../components/FollowButton';
+
+moment.locale('ko');
 
 const CardWrapper = styled.div`
   margin-bottom: 20px;
@@ -123,7 +122,6 @@ const PostCard = memo(({ post }) => {
           </Popover>,
         ]}
         title={post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null}
-        extra={<FollowButton post={post} onUnfollow={onUnfollow} onFollow={onFollow} />}
         >
         {post.RetweetId && post.Retweet
           ? (
@@ -151,10 +149,17 @@ const PostCard = memo(({ post }) => {
               <Card.Meta
                 avatar={(
                   <Link href={{ pathname: '/user', query: { id: post.User.id } }} as={`/user/${post.User.id}`}>
-                    <a><Avatar>{post.User.nickname[0]}</Avatar></a>
+                    <a>
+                      <Avatar>
+                        {post.User.nickname[0]}
+                      </Avatar>
+                    </a>
                   </Link>
                 )}
-                title={post.User.nickname}
+                title={<>
+                <span style={{ marginRight: '10px' }}>{post.User.nickname}</span>
+                <FollowButton post={post} onUnfollow={onUnfollow} onFollow={onFollow} />
+                </>}
                 description={<PostCardContent postData={post.content} />} // a tag x -> Link
               />
             </>
