@@ -5,7 +5,6 @@ import { LOAD_HASHTAG_POSTS_REQUEST } from '../reducers/post';
 import PostCard from '../containers/PostCard';
 
 const Hashtag = ({ tag }) => {
-  console.log(tag);
   const dispatch = useDispatch();
   const { mainPosts, hasMorePost } = useSelector(state => state.post);
 
@@ -43,7 +42,6 @@ Hashtag.propTypes = {
 
 Hashtag.getInitialProps = async (context) => { // context는 ctx obj {req, qurey 같은 정보}
   const tag = context.query.tag;
-  console.log('hashtag getInitialProps', tag);
   context.store.dispatch({
     type: LOAD_HASHTAG_POSTS_REQUEST,
     data: tag,

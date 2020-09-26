@@ -37,7 +37,6 @@ const PostForm = () => {
   }, []);
 
   const onChangeImages = useCallback((e) => {
-    console.log(e.target.files);
     const imageFormData = new FormData();
     [].forEach.call(e.target.files, (f) => { // key/val 로 append해서 formdata 보내줘야함
       imageFormData.append('image', f);

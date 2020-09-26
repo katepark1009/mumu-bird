@@ -66,13 +66,13 @@ const Signup = () => {
     setTerm(e.target.checked)
   }) //함수 안에서 사용하는 state 없을때는 [] 생략
 
-  console.log({
-    id,
-    nick,
-    password,
-    passwordCheck,
-    term
-  })
+  // console.log({
+  //   id,
+  //   nick,
+  //   password,
+  //   passwordCheck,
+  //   term
+  // })
 
   if(me) { // 로그인 상태시 화면 감춤
     return null

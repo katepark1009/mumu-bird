@@ -174,7 +174,6 @@ const PostCard = memo(({ post }) => {
             dataSource={post.Comments || []}
             renderItem={item => (
               <li>
-                {console.log("item", item)}
                 <Comment
                   author={item.User.nickname}
                   avatar={(

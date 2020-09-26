@@ -53,7 +53,6 @@ User.propTypes = {
 
 User.getInitialProps = async (context) => { // SSR. 페이지 처음 로딩시 서버쪽에서 실행, 여기서 api 요청 -> 서버쪽에서 데이터 완성되어 프론트로 전달.
   const id = parseInt(context.query.id, 10);
-  console.log('user getInitialProps', id);
   context.store.dispatch({
     type: LOAD_USER_REQUEST,
     data: id,

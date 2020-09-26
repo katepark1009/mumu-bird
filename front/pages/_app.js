@@ -71,7 +71,6 @@ MumuBird.propTypes = {
 }
 
 MumuBird.getInitialProps = async (context) => {
-  console.log(context);
   const { ctx, Component } = context;
   let pageProps = {};
   const cookie = ctx.isServer ? ctx.req.headers.cookie : '';

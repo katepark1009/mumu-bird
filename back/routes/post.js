@@ -33,7 +33,6 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST 
         const result = await Promise.all(hashtags.map(tag => db.Hashtag.findOrCreate({
           where: { name: tag.slice(1).toLowerCase() },
         })));
-        console.log(result);
         await newPost.addHashtags(result.map(r => r[0]));
       }
       if (req.body.image) { // 이미지 주소를 여러개 올리면 image: [주소1, 주소2]
@@ -58,7 +57,6 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST 
           model: db.Image,
         }],
       });
-      console.log('mumu', fullPost)
       res.json(fullPost);
     } catch (e) {
       console.error(e);
@@ -71,7 +69,6 @@ router.post('/images', upload.array('image'), (req, res)=>{ // 이미지 가져�
   //upload.fields([ {name: 'image'}, {name: 'img'}]) - 이미지 이름을 다르게 한 경우
   //upload.none() 하나도 안올리는 경우
 
-  console.log(req.files);
   res.json(req.files.map(v => v.filename));
 })
 

@@ -23,7 +23,6 @@ const ImagesZoom = ({ images, onClose }) => {
             slidesToScroll={1}
           >
             {images.map((v, i) => {
-            console.log("ImagesZoom -> images", images)
               return (
                 <div key={i} style={{ padding: 32, textAlign: 'center' }}>
                   <img src={`http://localhost:3065/${v.src}`} style={{ margin: '0 auto', maxHeight: 750 }} />

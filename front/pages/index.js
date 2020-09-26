@@ -12,7 +12,6 @@ const Home = () => {
   const countRef = useRef([]);
 
   const onScroll = useCallback(() => {
-    console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight)
     // window.scrollY = 현재위치(윈도우 상 제일윗부분)
     if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
       console.log('more posts loading')
@@ -51,7 +50,7 @@ const Home = () => {
 }
 
 Home.getInitialProps = async (context) => {
-  console.log(Object.keys(context)); // ["pathname", "query", "asPath", "AppTree", "store", "isServer"]
+  // console.log(Object.keys(context)); // ["pathname", "query", "asPath", "AppTree", "store", "isServer"]
   context.store.dispatch({ // store 리덕스 -> dispatch 액션 실행 가능
     type: LOAD_MAIN_POSTS_REQUEST,
   });
